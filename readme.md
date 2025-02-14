@@ -286,5 +286,3 @@ Set up a GET request in your backend to retrieve cart items for a specific user.
 2️⃣ Fetch Products from the Database
 Query the database using the user’s email to retrieve all products in their cart.
 Return the fetched products as a JSON response.
-
-----------------------------------------------------------------------------------------
