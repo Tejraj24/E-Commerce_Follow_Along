@@ -19,7 +19,7 @@ const CreateAddress = () => {
             address2,
             zipCode,
             addressType,
-            email: "valid@gmail.com"
+            email: "valid@example.com"
         };
         try {
             const response = await axios.post(
@@ -27,7 +27,6 @@ const CreateAddress = () => {
                 addressData,
                 {
                     headers: { "Content-Type": "application/json" },
-                    
                 }
             );
             if (response.status === 201) {
