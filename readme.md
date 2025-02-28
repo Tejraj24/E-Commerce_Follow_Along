@@ -424,3 +424,10 @@ This milestone enhances the user experience by providing a profile page to view 
 Overview In this milestone, we created a backend endpoint to store user addresses in the database. The endpoint receives address details from the frontend form and appends them to the address array in the user collection.
 
 Learning Outcomes Implemented an API endpoint to handle address storage. Updated the user collection to include multiple addresses. Strengthened backend skills for handling user profiles. Submission Details Code pushed to GitHub repository. Repository is publicly accessible. This README summarizes the progress. 
+
+**Milestone 23: Implementing Place Order & Select Address Page**
+Overview In this milestone, we implemented the Place Order functionality in our e-commerce project. This includes adding a button inside the cart page, creating a select address page, and setting up the backend to handle addresses.
+
+Features Implemented ✅ Place Order Button: Added inside the cart page, redirects to the select address page. ✅ Select Address Page: Displays all saved addresses and allows the user to choose a delivery address. ✅ Backend API for Addresses: Created an endpoint to fetch user addresses. ✅ Order Schema: Defined the schema for storing order details in MongoDB.
+
+Steps Completed Added a "Place Order" button inside the cart page. Created a select address page with all saved addresses. Developed a backend API to retrieve user addresses. Defined a MongoDB schema to store order details. Submission Details Code pushed to GitHub ✅ Repository is publicly accessible ✅ README updated ✅
