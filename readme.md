@@ -419,3 +419,8 @@ This milestone enhances the user experience by providing a profile page to view 
 - React
 - React Router
 - useState hook for form handling
+
+**Milestone 22 - Save Address in User** Profile
+Overview In this milestone, we created a backend endpoint to store user addresses in the database. The endpoint receives address details from the frontend form and appends them to the address array in the user collection.
+
+Learning Outcomes Implemented an API endpoint to handle address storage. Updated the user collection to include multiple addresses. Strengthened backend skills for handling user profiles. Submission Details Code pushed to GitHub repository. Repository is publicly accessible. This README summarizes the progress. 
