@@ -431,3 +431,14 @@ Overview In this milestone, we implemented the Place Order functionality in our 
 Features Implemented ✅ Place Order Button: Added inside the cart page, redirects to the select address page. ✅ Select Address Page: Displays all saved addresses and allows the user to choose a delivery address. ✅ Backend API for Addresses: Created an endpoint to fetch user addresses. ✅ Order Schema: Defined the schema for storing order details in MongoDB.
 
 Steps Completed Added a "Place Order" button inside the cart page. Created a select address page with all saved addresses. Developed a backend API to retrieve user addresses. Defined a MongoDB schema to store order details. Submission Details Code pushed to GitHub ✅ Repository is publicly accessible ✅ README updated ✅
+
+**Milestone 24 - Order Confirmation Page 🚀**
+Overview In this milestone, we implemented the Order Confirmation Page, where users can review their order details before finalizing the purchase.
+
+Key Features ✅ Display all the ordered products. ✅ Show the selected delivery address. ✅ Calculate and display the total price of the cart. ✅ Provide a "Place Order" button to confirm the purchase.
+
+Implementation Steps ⿡ Fetch and display ordered products. ⿢ Show the selected address for delivery. ⿣ Calculate the total order value dynamically. ⿤ Add a "Place Order" button to proceed with checkout.
+
+Submission Details 📌 Code pushed to GitHub 📂 📌 Public repository link updated 🔗 📌 Assignment submitted successfully ✅
+
+🎉 Milestone 24 completed
