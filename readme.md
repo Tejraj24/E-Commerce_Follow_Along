@@ -463,3 +463,58 @@ Submission Details 📌 Code pushed to GitHub 📂 📌 Public repository link u
 ✅ Efficient endpoint design for placing orders.  
 ✅ Ensures proper data structure and storage.  
 ✅ Enhances understanding of MongoDB data handling and endpoint creation.  
+
+**🚀 Milestone 26: Backend Endpoint for Fetching User Orders**
+
+📌 Overview
+
+In this milestone, we created a backend endpoint that retrieves all orders placed by a specific user based on their email. This feature is crucial for allowing users to view their past orders in an e-commerce system.
+
+🎯 Learning Goals
+
+Understand how to query the database using Mongoose.
+
+Implement an API endpoint to fetch user-specific data.
+
+Improve error handling in API responses.
+
+🛠️ Technologies Used
+
+Node.js (Runtime Environment)
+
+Express.js (Web Framework)
+
+MongoDB with Mongoose (Database & ORM)
+
+
+
+## Steps for Milestone 27 📝
+
+1. Create a `My Orders` page in the frontend.
+2. Send a `GET` request to the `my-orders` endpoint created in the previous milestone.
+3. Pass the user's email to the endpoint to retrieve all their orders.
+4. Display all the user's orders on the `My Orders` page.
+5. Add the `My Orders` page to the **Navbar** for better navigation.
+
+This lesson will help you understand how to retrieve and display a user's orders in the frontend.
+
+## Submission Guidelines 📥
+
+- Push your code to your **GitHub repository**.
+- Ensure your repository is **publicly accessible**.
+- Update the **README.md** file to summarize your progress for Milestone 27.
+- Share the **repository link** in the assignment submission section.
+
+
+## Steps for Milestone 28 📝  
+
+### **Frontend: My Orders Page**  
+1. Add a **"Cancel Order"** button for each order on the **My Orders** page.  
+2. If the order is **already canceled**, the button should **not be displayed**.  
+
+### **Backend: Cancel Order Endpoint**  
+1. Create an endpoint that will receive the **order ID** from the request.  
+2. Retrieve the **order** from the database using the order ID.  
+3. Update the **status** of the order to `"Canceled"`.  
+4. Save the updated order in the database.  
+5. Respond with a success message.
