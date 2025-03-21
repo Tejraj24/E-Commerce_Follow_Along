@@ -518,3 +518,50 @@ This lesson will help you understand how to retrieve and display a user's orders
 3. Update the **status** of the order to `"Canceled"`.  
 4. Save the updated order in the database.  
 5. Respond with a success message.
+
+**Milestone 29 - PayPal Integration**
+**Milestone Overview**
+In this milestone, I have started integrating an online payment gateway using the PayPal API in my application.
+
+Key Implementations ✔ Created a PayPal Developer Account and set up a Sandbox Account. ✔ Retrieved and saved the Sandbox User ID and Client ID. ✔ Updated the order confirmation page with two payment options:
+
+Cash on Delivery (COD) Online Payment via PayPal ✔ Implemented radio buttons to toggle between COD and PayPal payment. ✔ Prepared the UI to display PayPal payment buttons (to be coded in the next milestone). Next Steps Implement the functionality for PayPal payment processing in the upcoming milestone.
+
+# Milestone 30 - PayPal Payment Integration
+
+This project implements an online payment gateway using the PayPal API in a React application.
+
+## Features
+- Integrated PayPal API for secure payments.
+- Used react-paypal-js for seamless UI integration.
+- Supports multiple payment methods like credit/debit cards.
+
+## Installation
+1. Clone the repository:
+    bash
+    git clone <repository-url>
+    
+2. Install dependencies:
+    bash
+    npm install
+    
+3. Add your PayPal client key in a .env file:
+    env
+    REACT_APP_PAYPAL_CLIENT_ID=your-client-id
+    
+4. Start the application:
+    bash
+    npm run dev
+    
+
+## Usage
+- Access the payment page and proceed with PayPal payment.
+
+## Technologies Used
+- React
+- PayPal API
+- react-paypal-js
+
+---
+
+✅ Successfully completed Milestone 30.
