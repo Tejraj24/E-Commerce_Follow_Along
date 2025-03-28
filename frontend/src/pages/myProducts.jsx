@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Myproduct from "../components/auth/myproduct";
 import NavBar from "../components/auth/nav";
 import { useSelector } from "react-redux";
+import axios from "../axiosConfig";
 
 export default function MyProducts() {
     const [products, setProducts] = useState([]);
@@ -9,22 +10,15 @@ export default function MyProducts() {
     const [error, setError] = useState(null);
     // Get the email from Redux state
     const state = useSelector((state) => state);
-    console.log(state);
-        const email = useSelector((state) => state.user.email);
-    
+console.log(state);
+    const email = useSelector((state) => state.user.email);
 
     useEffect(() => {
         // Only fetch if email is available
-        if (!email) return;
-        fetch(`http://localhost:8000/api/v2/product/my-products?email=${email}`)
+         if (!email) return;
+         axios.get(`/api/v2/product/my-products?email=${email}`,{withCredentials: true,})
             .then((res) => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then((data) => {
-                setProducts(data.products);
+                setProducts(res.data.products);
                 setLoading(false);
             })
             .catch((err) => {

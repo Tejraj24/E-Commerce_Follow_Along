@@ -8,7 +8,7 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home/>}/>
-        <Route path='/login' element={<LoginPage/>}/>
+        {/* <Route path='/login' element={<LoginPage/>}/>
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/create-product" element={<CreateProduct />} />
         <Route path="/create-product/:id" element={<CreateProduct />} />
@@ -19,7 +19,7 @@ const App = () => {
         <Route path='/create-address' element={<CreateAddress />} />
         <Route path="/select-address" element={<SelectAddress />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
-        <Route path="/myorders" element={<MyOrdersPage />} />
+        <Route path="/myorders" element={<MyOrdersPage />} /> */}
       </Routes>
     </BrowserRouter>
   )
