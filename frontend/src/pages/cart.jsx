@@ -1,7 +1,7 @@
 // Cart.jsx
 import React, { useState, useEffect } from 'react';
 import CartProduct from '../components/auth/CartProduct';
-import NavBar from '../components/auth/nav';
+import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
 
 const Cart = () => {
@@ -34,7 +34,7 @@ const Cart = () => {
 
       return (
         <div className='w-full h-screen'>
-          <NavBar />
+          <Navbar />
           <div className='w-full h-full justify-center items-center flex'>
             <div className='w-full md:w-4/5 lg:w-4/6 2xl:w-2/3 h-full border-l border-r border-neutral-300 flex flex-col'>
               <div className='w-full h-16 flex items-center justify-center'>

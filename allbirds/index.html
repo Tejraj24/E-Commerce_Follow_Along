@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consent Manager Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .consent-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consent Manager Demo</h1>
+    
+    <div class="consent-section">
+        <h2>Consent Status</h2>
+        <div id="status" class="status">Loading consent status...</div>
+    </div>
+
+    <div class="consent-section">
+        <h2>Update Consent</h2>
+        <div>
+            <button id="btnAcceptAll">Accept All</button>
+            <button id="btnRejectAll">Reject All</button>
+            <button id="btnShowDetails">Show Details</button>
+        </div>
+    </div>
+
+    <div id="detailedControls" class="consent-section" style="display: none;">
+        <h3>Detailed Preferences</h3>
+        <div>
+            <label>
+                <input type="checkbox" id="cbEssential" disabled checked>
+                Essential (Required)
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" id="cbAnalytics">
+                Analytics
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" id="cbMarketing">
+                Marketing
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" id="cbPersonalization">
+                Personalization
+            </label>
+        </div>
+        <button id="btnSavePreferences">Save Preferences</button>
+    </div>
+
+    <script type="module" src="./src/demo.js"></script>
+</body>
+</html>

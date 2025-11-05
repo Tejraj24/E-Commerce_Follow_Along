@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import NavBar from "../components/auth/nav";
+import Navbar from "../components/Navbar";
 const CreateAddress = () => {
     const navigate = useNavigate();
     const [country, setCountry] = useState("");
@@ -40,7 +40,7 @@ const CreateAddress = () => {
     };
     return (
         <>
-            <NavBar />
+            <Navbar />
             <div className="w-[90%] max-w-[500px] bg-white shadow h-auto rounded-[4px] p-4 mx-auto">
                 <h5 className="text-[24px] font-semibold text-center">Add Address</h5>
                 <form onSubmit={handleSubmit}>

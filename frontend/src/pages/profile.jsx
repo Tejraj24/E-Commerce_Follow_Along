@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddressCard from "../components/auth/AddressCard";
-import NavBar from "../components/auth/nav";
+import Navbar from "../components/Navbar";
 export default function Profile() {
 	const [personalDetails, setPersonalDetails] = useState({
 		name: "",
@@ -41,7 +41,7 @@ export default function Profile() {
 
 	return (
 		<>
-			<NavBar />
+			<Navbar />
 			<div className="w-full min-h-screen bg-neutral-800 p-5">
 				<div className="w-full h-full bg-neutral-700 rounded-lg">
 					<div className="w-full h-max my-2 p-5">
