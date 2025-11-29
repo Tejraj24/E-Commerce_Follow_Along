@@ -6,6 +6,11 @@ const router = express.Router();
 const { pupload } = require("../multer");
 const path = require('path');
 
+// Helper function to validate ObjectId
+const isValidObjectId = (id) => {
+  return mongoose.Types.ObjectId.isValid(id);
+};
+
 const validateProductData = (data) => {
   const errors = [];
   if (!data.name) errors.push("Product name is required");
@@ -118,6 +123,13 @@ router.get('/my-products', async (req, res) => {
 router.get('/product/:id', async (req, res) => {
   console.log("Fetching products...");
   const { id } = req.params;
+  
+  // Validate ObjectId
+  if (!isValidObjectId(id)) {
+    console.log('Invalid ObjectId format:', id);
+    return res.status(400).json({ error: 'Invalid product ID format.' });
+  }
+  
   try {
       const product = await Product.findById(id);
       console.log("Product: ", product);
@@ -134,6 +146,13 @@ router.get('/product/:id', async (req, res) => {
 router.put('/update-product/:id', pupload.array('images', 10), async (req, res) => {
   const { id } = req.params;
   const { name, description, category, tags, price, stock, email } = req.body;
+  
+  // Validate ObjectId
+  if (!isValidObjectId(id)) {
+    console.log('Invalid ObjectId format:', id);
+    return res.status(400).json({ error: 'Invalid product ID format.' });
+  }
+  
   try {
       const existingProduct = await Product.findById(id);
       if (!existingProduct) {
@@ -177,6 +196,13 @@ router.put('/update-product/:id', pupload.array('images', 10), async (req, res) 
 
 router.delete('/delete-product/:id', async (req, res) => {
   const { id } = req.params;
+  
+  // Validate ObjectId
+  if (!isValidObjectId(id)) {
+    console.log('Invalid ObjectId format:', id);
+    return res.status(400).json({ error: 'Invalid product ID format.' });
+  }
+  
   try {
       const existingProduct = await Product.findById(id);
       if (!existingProduct) {

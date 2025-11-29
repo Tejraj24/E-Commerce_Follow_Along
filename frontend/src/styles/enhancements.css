@@ -1,0 +1,277 @@
+/* Enhanced Styles for Overmode Components */
+
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Image Loading States */
+img {
+  transition: opacity 0.3s ease;
+}
+
+img[loading="lazy"] {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+img[loading="lazy"]:not([src=""]) {
+  opacity: 1;
+}
+
+/* Button Enhancements */
+button,
+a.button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button::before,
+a.button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+button:hover::before,
+a.button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Card Hover Effects */
+.promo-main__slide,
+.tranding-main__slide,
+.catalog-main__slide,
+.deals-main__slide {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.promo-main__slide:hover,
+.tranding-main__slide:hover,
+.catalog-main__slide:hover,
+.deals-main__slide:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Text Selection */
+::selection {
+  background: #000;
+  color: #fff;
+}
+
+::-moz-selection {
+  background: #000;
+  color: #fff;
+}
+
+/* Focus States for Accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
+/* Loading States */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.loading {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 0px,
+    #f8f8f8 40px,
+    #f0f0f0 80px
+  );
+  background-size: 1000px;
+  animation: shimmer 2s infinite;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Slide In Animation */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.6s ease-out;
+}
+
+/* Pulse Animation for Active States */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Gradient Overlay for Hero Images */
+.promo-main__slide::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Smooth Transitions for All Interactive Elements */
+a,
+button,
+input,
+select,
+textarea {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Improved Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+p {
+  line-height: 1.6;
+}
+
+/* Better Link Styling */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #666;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Print Styles */
+@media print {
+  .promo-main__btns,
+  .nav,
+  .header__actions {
+    display: none;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .promo-main__title,
+  .tranding-main__title,
+  .catalog-main__title,
+  .deals-main__title {
+    text-shadow: none;
+  }
+  
+  button,
+  a.button {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Dark Mode Support (Future) */
+@media (prefers-color-scheme: dark) {
+  /* Will be implemented when dark mode is needed */
+}
+
