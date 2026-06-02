@@ -15,9 +15,10 @@ const connectDatabase = () => {
         .catch((err) => {
             // Log an error message if the connection fails
             console.error(`Database connection failed: ${err.message}`);
-            
-            // Exit the Node.js process to prevent the application from running without a valid database connection
-            process.exit(1); // Exit with a failure code (1 indicates an error occurred)
+
+            // For development, do not exit the process so the server can start.
+            // This allows using mocked responses or testing endpoints that don't require DB access.
+            // In production, you should still fail fast and exit the process.
         });
 };
 
