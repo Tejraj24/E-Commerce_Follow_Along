@@ -26,7 +26,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer__container container">
-        <div className="footer__top" style={{ marginBottom: '40px' }}>
+        <div className="footer__top">
           <Link to="/" className="footer__logo">
             <img 
               src="https://cdn89689517.ahacdn.me/frontend/img/logo_white.svg" 
@@ -38,7 +38,7 @@ const Footer = () => {
 
         <div className="footer__bottom">
           <div className="footer__menu menu-footer">
-            <nav className="menu-footer__body">
+            <nav className="menu-footer__body" aria-label="Footer navigation">
               <ul className="menu-footer__list">
                 {footerLinks.map((link) => (
                   <li key={link.name} className="menu-footer__item">

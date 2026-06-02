@@ -8,6 +8,7 @@ const spriteHref = (id) => `${iconsSprite}#${id}`;
 const OvermodeHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [searchGender, setSearchGender] = useState('women');
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -42,6 +43,16 @@ const OvermodeHeader = () => {
   const toggleSearch = useCallback(() => {
     setIsSearchOpen((prev) => !prev);
   }, []);
+
+  const handleSearchSubmit = useCallback((event) => {
+    event.preventDefault();
+
+    if (!searchQuery.trim()) {
+      return;
+    }
+
+    window.location.href = `/search/${searchGender}?q=${encodeURIComponent(searchQuery.trim())}`;
+  }, [searchGender, searchQuery]);
 
   const handleMenuLinkClick = useCallback(() => {
     if (isMenuOpen) {
@@ -84,8 +95,12 @@ const OvermodeHeader = () => {
             </div>
             
             {/* Navigation in the center */}
-            <div className="header__menu menu">
-              <nav className={`menu__body ${isMenuOpen ? 'active' : ''}`} onClick={handleMenuLinkClick}>
+            <div className={`header__menu menu ${isMenuOpen ? 'active' : ''}`}>
+              <nav
+                id="site-navigation"
+                className={`menu__body ${isMenuOpen ? 'active' : ''}`}
+                onClick={handleMenuLinkClick}
+              >
                 <ul className="menu__list">
                   <li 
                     className="menu__item"
@@ -766,15 +781,27 @@ const OvermodeHeader = () => {
             {/* Search and icons on the right */}
             <div className="header__options">
               <div className={`header__search search ${isSearchOpen ? 'active' : ''}`}>
-                <form className="search__body" method="GET" action={`/search/${searchGender}`}>
+                <form
+                  id="site-search"
+                  className="search__body"
+                  method="GET"
+                  action={`/search/${searchGender}`}
+                  onSubmit={handleSearchSubmit}
+                >
                   <div className="search__icon">
                     <svg>
                       <use href={spriteHref('search')}></use>
                     </svg>
                   </div>
                   <div className="search__input">
-                    <input type="text" name="q" placeholder="Search..." value="" />
-                    <button type="button" className="search__submit">
+                    <input
+                      type="text"
+                      name="q"
+                      placeholder="Search..."
+                      value={searchQuery}
+                      onChange={(event) => setSearchQuery(event.target.value)}
+                    />
+                    <button type="submit" className="search__submit">
                       <svg>
                         <use href={spriteHref('arrow')}></use>
                       </svg>
@@ -826,12 +853,26 @@ const OvermodeHeader = () => {
                   </button>
                   <span className="sr-only">Log in</span>
                 </Link>
-                <button type="button" className="header__search-icon" title="Search" onClick={toggleSearch}>
+                <button
+                  type="button"
+                  className="header__search-icon"
+                  title="Search"
+                  onClick={toggleSearch}
+                  aria-expanded={isSearchOpen}
+                  aria-controls="site-search"
+                >
                   <svg>
                     <use href={spriteHref('search')}></use>
                   </svg>
                 </button>
-                <button type="button" className="header__menu-icon menu-icon" title="Menu" onClick={toggleMenu}>
+                <button
+                  type="button"
+                  className="header__menu-icon menu-icon"
+                  title="Menu"
+                  onClick={toggleMenu}
+                  aria-expanded={isMenuOpen}
+                  aria-controls="site-navigation"
+                >
                   <span></span>
                 </button>
               </div>
@@ -839,6 +880,14 @@ const OvermodeHeader = () => {
           </div>
         </div>
       </header>
+      {isMenuOpen && (
+        <button
+          type="button"
+          className="header__backdrop"
+          aria-label="Close menu"
+          onClick={toggleMenu}
+        />
+      )}
       {isSearchOpen && (
         <div className="search-overlay" onClick={toggleSearch}></div>
       )}

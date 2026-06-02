@@ -1651,3 +1651,299 @@ body._lock, body.lock {
   color: #9b9b9b;
   text-decoration: line-through;
 }
+
+/* ==========================================================
+   RESPONSIVE OVERRIDES
+   These rules intentionally come last so they win over the
+   older desktop-first defaults above.
+   ========================================================== */
+
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.wrapper,
+.main {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body.lock {
+  overflow: hidden;
+  touch-action: none;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.container,
+.container2 {
+  width: min(100%, 1400px);
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+}
+
+.header__container {
+  padding-inline: clamp(1rem, 3vw, 2rem);
+}
+
+.header__body {
+  min-height: 4.75rem;
+  gap: 1rem;
+}
+
+.header__logo {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.header__logo img {
+  width: clamp(7.5rem, 20vw, 11rem);
+  height: auto;
+}
+
+.header__options {
+  min-width: 0;
+  gap: clamp(0.5rem, 1.5vw, 1rem);
+}
+
+.header__search {
+  min-width: 0;
+}
+
+.search__body {
+  width: min(100%, 23rem);
+  min-width: 0;
+}
+
+.search__input input {
+  min-width: 0;
+}
+
+.header__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  border: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 94;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.menu__body {
+  min-width: 0;
+}
+
+.menu__submenu {
+  width: min(1200px, calc(100vw - 2rem));
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+}
+
+.menu__submenu.active {
+  transform: translateX(-50%) translateY(0);
+}
+
+.submenu__container {
+  padding-inline: clamp(1rem, 2vw, 2rem);
+}
+
+.footer {
+  padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(1.25rem, 3vw, 2rem);
+}
+
+.footer__container {
+  width: min(100%, 1400px);
+}
+
+.footer__top {
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  text-align: center;
+}
+
+.footer__bottom {
+  gap: 1rem;
+}
+
+.menu-footer__list {
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+@media (max-width: 1024px) {
+  .header__menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(88vw, 24rem);
+    background: #fff;
+    box-shadow: -24px 0 40px rgba(0, 0, 0, 0.12);
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 0.32s ease, visibility 0.32s ease;
+    padding: 5.5rem 1.25rem 1.5rem;
+    overflow-y: auto;
+    z-index: 96;
+  }
+
+  .header__menu.active,
+  .header__menu:has(.menu__body.active) {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  .menu__body {
+    display: block;
+    height: 100%;
+  }
+
+  .menu__list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .menu__item {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .menu__link {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.25rem 0;
+    justify-content: space-between;
+  }
+
+  .menu__arrow {
+    margin-left: auto;
+  }
+
+  .menu__submenu {
+    position: static;
+    width: 100%;
+    min-width: 0;
+    margin-top: 0.5rem;
+    padding: 0.75rem 0 0;
+    border: 0;
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .menu__submenu.active {
+    transform: none;
+  }
+
+  .submenu__body {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .submenu__section_mob {
+    display: block;
+  }
+
+  .submenu__container {
+    padding: 0;
+  }
+
+  .header__search {
+    display: none;
+  }
+
+  .header__user {
+    display: none;
+  }
+
+  .header__menu-icon {
+    display: flex;
+  }
+}
+
+@media (max-width: 767px) {
+  .header__container {
+    padding-inline: 1rem;
+  }
+
+  .header__body {
+    min-height: 4.25rem;
+  }
+
+  .header__logo img {
+    width: 7.5rem;
+  }
+
+  .submenu__body {
+    grid-template-columns: 1fr;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .menu-footer__list {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .header__container {
+    padding-inline: 0.875rem;
+  }
+
+  .header__logo img {
+    width: 6.75rem;
+  }
+
+  .footer {
+    padding-top: 2.5rem;
+  }
+
+  .menu-footer__link {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
