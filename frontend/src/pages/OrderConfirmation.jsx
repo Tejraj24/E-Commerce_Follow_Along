@@ -1,6 +1,8 @@
 // OrderConfirmation.jsx
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import userService from '../services/userService';
+import productService from '../services/productService';
+import orderService from '../services/orderService';
 import NavBar from '../components/auth/nav';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -22,12 +24,7 @@ const OrderConfirmation = () => {
         const fetchData = async () => {
             try {
                 // Fetch selected address
-                const addressResponse = await axios.get('http://localhost:8000/api/v2/user/addresses', {
-                    params: { email: email },
-                });
-                if (addressResponse.status !== 200) {
-                    throw new Error(`Failed to fetch addresses. Status: ${addressResponse.status}`);
-                }
+                const addressResponse = await userService.getAddresses(email);
                 const addressData = addressResponse.data;
                 const address = addressData.addresses.find(addr => addr._id === addressId);
                 if (!address) {
@@ -35,19 +32,14 @@ const OrderConfirmation = () => {
                 }
                 setSelectedAddress(address);
                 // Fetch cart products from /cartproducts endpoint
-                const cartResponse = await axios.get('http://localhost:8000/api/v2/product/cartproducts', {
-                    params: { email: email },
-                });
-                if (cartResponse.status !== 200) {
-                    throw new Error(`Failed to fetch cart products. Status: ${cartResponse.status}`);
-                }
+                const cartResponse = await productService.getCartProducts(email);
                 const cartData = cartResponse.data;
                 // Map cart items to include full image URLs
-                const processedCartItems = cartData.cart.map(item => ({
+                    const processedCartItems = cartData.cart.map(item => ({
                     product: item.productId._id,
                     name: item.productId.name,
                     price: item.productId.price,
-                    image: item.productId.images.map(imagePath => `http://localhost:8000${imagePath}`),
+                    image: item.productId.images.map(imagePath => `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${imagePath}`),
                     quantity: item.quantity,
                 }));
                 setCartItems(processedCartItems);
@@ -74,7 +66,7 @@ const OrderConfirmation = () => {
                 name: item.name,
                 quantity: item.quantity,
                 price: item.price,
-                image: item.images && item.images.length > 0 ? item.images[0] : '/default-avatar.png'
+                image: item.image && item.image.length > 0 ? item.image[0] : '/default-avatar.png'
             }));
             // console.log(orderItems);
             // Construct payload with email, shippingAddress, and orderItems
@@ -84,7 +76,7 @@ const OrderConfirmation = () => {
                 orderItems,
             };
             // Send POST request to place orders
-            const response = await axios.post('http://localhost:8000/api/v2/orders/place-order', payload);
+            const response = await orderService.placeOrder(payload);
             console.log('Orders placed successfully:', response.data);
 
             // Navigate to an order success page or display a success message

@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import iconsSprite from '../assets/img/icons/icons.svg?url';
 
 const spriteHref = (id) => `${iconsSprite}#${id}`;
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onQuickView }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -15,20 +16,22 @@ const ProductCard = ({ product }) => {
 
   const handleQuickView = (e) => {
     e.preventDefault();
-    // Implement quick view functionality
-    console.log('Quick view for product:', product._id);
+    e.stopPropagation();
+    onQuickView?.(product);
   };
 
   return (
-    <div 
-      className={`prod-card ${isHovered ? 'hovered' : ''}`}
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className={`prod-card ${isHovered ? 'hovered' : ''} bg-white rounded-lg shadow-sm overflow-hidden`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <Link to={`/product/${product._id}`} className="prod-card__link">
         <div className="prod-card__image">
           <img 
-            src={product.images?.[0] || 'https://via.placeholder.com/300x300'} 
+            src={(import.meta.env.VITE_API_URL || 'http://localhost:8000') + (product.images?.[0] || '') || 'https://via.placeholder.com/300x300'} 
             alt={product.name}
             className="prod-card__img"
             loading="lazy"
@@ -101,7 +104,7 @@ const ProductCard = ({ product }) => {
           )}
         </div>
       </Link>
-    </div>
+    </motion.div>
   );
 };
 

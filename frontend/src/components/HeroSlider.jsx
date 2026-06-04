@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
@@ -94,8 +95,8 @@ const HeroSlider = () => {
             >
               {slides.map((slide) => (
                 <div key={slide.id} className="w-full flex-shrink-0">
-                  <div className="promo-main__slide relative">
-                    <div className="promo-main__image">
+                    <div className="promo-main__slide relative">
+                      <div className="promo-main__image">
                       <picture>
                         <source 
                           media="(max-width: 767px)" 
@@ -115,9 +116,9 @@ const HeroSlider = () => {
                       </picture>
                     </div>
                     <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                      <div className="text-center text-white px-4">
+                      <motion.div className="text-center text-white px-4" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
                         <h2 
-                          className="promo-main__title text-3xl md:text-4xl lg:text-5xl font-bold mb-4"
+                          className="promo-main__title text-3xl md:text-4xl lg:text-5xl font-bold mb-4 lux-heading"
                           dangerouslySetInnerHTML={{ __html: slide.title }}
                         />
                         <p className="text-lg md:text-xl mb-8 opacity-90">
@@ -137,7 +138,7 @@ const HeroSlider = () => {
                             SHOP MEN
                           </Link>
                         </div>
-                      </div>
+                      </motion.div>
                     </div>
                   </div>
                 </div>

@@ -11,7 +11,7 @@ const ProductListing = ({ products = [] }) => {
       {/* Hero Section */}
       <section className="bg-gray-100 py-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-4">New Arrivals</h1>
+          <h1 className="text-4xl font-bold mb-4 lux-heading">New Arrivals</h1>
           <p className="text-gray-600">Summer Collection 2025</p>
         </div>
       </section>
@@ -41,13 +41,13 @@ const ProductListing = ({ products = [] }) => {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {products.map((product) => (
             <div key={product._id || product.id} className="group relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
               <div className="relative h-64 w-full overflow-hidden">
                 {/* Product Image */}
                 <img
-                  src={product.images?.[0] || 'https://via.placeholder.com/300x300'}
+                  src={(import.meta.env.VITE_API_URL || 'http://localhost:8000') + (product.images?.[0] || '') || 'https://via.placeholder.com/300x300'}
                   alt={product.name}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />

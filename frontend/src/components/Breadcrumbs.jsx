@@ -11,10 +11,10 @@ const Breadcrumbs = ({ items }) => {
   if (breadcrumbItems.length <= 1) return null;
 
   return (
-    <nav className="flex items-center space-x-2 text-sm text-gray-600 py-4" aria-label="Breadcrumb">
+    <nav className="flex items-center gap-2 overflow-x-auto py-4 text-sm text-gray-500 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Breadcrumb">
       <Link 
         to="/" 
-        className="flex items-center hover:text-gray-900 transition-colors"
+        className="flex items-center rounded-full border border-gray-200 bg-white px-3 py-2 text-gray-900 transition-colors hover:border-gray-900"
         aria-label="Home"
       >
         <FiHome size={16} />
@@ -25,16 +25,16 @@ const Breadcrumbs = ({ items }) => {
         
         return (
           <React.Fragment key={index}>
-            <FiChevronRight size={14} className="text-gray-400" />
+            <FiChevronRight size={14} className="shrink-0 text-gray-300" />
             
             {isLast ? (
-              <span className="text-gray-900 font-medium" aria-current="page">
+              <span className="rounded-full bg-gray-900 px-3 py-2 font-medium text-white" aria-current="page">
                 {item.label}
               </span>
             ) : (
               <Link 
                 to={item.path}
-                className="hover:text-gray-900 transition-colors"
+                className="whitespace-nowrap rounded-full border border-transparent px-3 py-2 transition-colors hover:border-gray-200 hover:bg-white hover:text-gray-900"
               >
                 {item.label}
               </Link>

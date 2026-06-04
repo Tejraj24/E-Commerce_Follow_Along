@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const FormData = require('form-data');
 
-// Base URL of your API
-const BASE_URL = 'http://localhost:8000/api/v2/product';
+// Base URL of your API - can be overridden with VITE_API_URL env var when running this script
+const BASE_URL = (process.env.VITE_API_URL || 'http://localhost:8000') + '/api/v2/product';
 
 // Sample product data for men's clothing
 const menProducts = [

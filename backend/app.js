@@ -4,9 +4,7 @@ const ErrorHandler = require("./middleware/error");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const product= require('./controller/product')
 const path=require('path')
-const orders = require('./controller/orders');
 
 app.use(express.json());
 app.use(cookieParser());
@@ -25,10 +23,12 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/products', express.static(path.join(__dirname, 'products')));
 
-//import Routes
-const user = require("./controller/user");
-app.use("/api/v2/user", user);
-app.use("/api/v2/product", product);
-app.use("/api/v2/orders", orders);
+// Import Routes (moved to dedicated routes folder)
+const userRoutes = require('./routes/userRoutes');
+const productRoutes = require('./routes/productRoutes');
+const ordersRoutes = require('./routes/ordersRoutes');
+app.use('/api/v2/user', userRoutes);
+app.use('/api/v2/product', productRoutes);
+app.use('/api/v2/orders', ordersRoutes);
 app.use(ErrorHandler);
 module.exports= app;

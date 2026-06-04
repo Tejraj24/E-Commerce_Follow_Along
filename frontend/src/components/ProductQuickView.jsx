@@ -1,5 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiHeart, FiShoppingBag, FiTruck, FiShield, FiRefreshCw } from 'react-icons/fi';
+
+const imageBase = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+const getProductImage = (product) => {
+  if (product?.image) return product.image;
+  if (product?.images?.[0]) {
+    const path = product.images[0];
+    return path.startsWith('http') ? path : `${imageBase}${path}`;
+  }
+  return 'https://via.placeholder.com/600x600';
+};
 
 const ProductQuickView = ({ product, isOpen, onClose, onAddToCart, onAddToWishlist }) => {
   const [selectedSize, setSelectedSize] = useState('');
@@ -50,28 +62,38 @@ const ProductQuickView = ({ product, isOpen, onClose, onAddToCart, onAddToWishli
   };
 
   return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
-      onClick={handleBackdropClick}
-    >
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-4 backdrop-blur-sm"
+        onClick={handleBackdropClick}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 24, scale: 0.98 }}
+          transition={{ duration: 0.25 }}
+          className="relative max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-[1.75rem] bg-white shadow-[0_30px_80px_rgba(15,23,42,0.25)]"
+        >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors"
+          className="absolute right-4 top-4 z-10 rounded-full bg-white p-2 shadow-md transition-colors hover:bg-gray-100"
           aria-label="Close quick view"
         >
           <FiX size={20} />
         </button>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-0 md:grid-cols-2">
           {/* Product Images */}
-          <div className="p-8">
-            <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">
+          <div className="p-4 sm:p-6 lg:p-8">
+            <div className="mb-4 aspect-square overflow-hidden rounded-[1.5rem] bg-gray-100">
               <img
-                src={product.image}
+                src={getProductImage(product)}
                 alt={product.name}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
             
@@ -80,7 +102,7 @@ const ProductQuickView = ({ product, isOpen, onClose, onAddToCart, onAddToWishli
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="aspect-square bg-gray-100 rounded-lg overflow-hidden cursor-pointer hover:opacity-75 transition-opacity">
                   <img
-                    src={product.image}
+                    src={getProductImage(product)}
                     alt={`${product.name} view ${i}`}
                     className="w-full h-full object-cover"
                   />
@@ -90,10 +112,11 @@ const ProductQuickView = ({ product, isOpen, onClose, onAddToCart, onAddToWishli
           </div>
 
           {/* Product Details */}
-          <div className="p-8">
+          <div className="border-t border-gray-100 p-4 sm:p-6 lg:border-l lg:border-t-0 lg:p-8">
             {/* Brand and Name */}
             <div className="mb-4">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">{product.name}</h2>
+              <p className="mb-2 text-xs uppercase tracking-[0.3em] text-gray-400">Quick view</p>
+              <h2 className="lux-heading mb-2 text-3xl font-bold text-gray-900">{product.name}</h2>
               <p className="text-lg text-gray-600">{product.brand}</p>
             </div>
 
@@ -124,7 +147,7 @@ const ProductQuickView = ({ product, isOpen, onClose, onAddToCart, onAddToWishli
             <div className="mb-6">
               <div className="flex items-center gap-3">
                 <span className="text-3xl font-bold text-gray-900">
-                  ${product.price.toFixed(2)}
+                  ${Number(product.price).toFixed(2)}
                 </span>
                 {product.originalPrice && (
                   <span className="text-xl text-gray-500 line-through">
@@ -209,11 +232,11 @@ const ProductQuickView = ({ product, isOpen, onClose, onAddToCart, onAddToWishli
             </div>
 
             {/* Action Buttons */}
-            <div className="space-y-3 mb-6">
+            <div className="mb-6 space-y-3">
               <button
                 onClick={handleAddToCart}
                 disabled={isAddingToCart}
-                className="w-full py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-gray-900 py-3 font-semibold text-white transition-transform hover:-translate-y-0.5 hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <FiShoppingBag size={18} />
                 {isAddingToCart ? 'Adding...' : 'Add to Cart'}
@@ -222,7 +245,7 @@ const ProductQuickView = ({ product, isOpen, onClose, onAddToCart, onAddToWishli
               <button
                 onClick={handleAddToWishlist}
                 disabled={isAddingToWishlist}
-                className="w-full py-3 border border-gray-300 rounded-lg font-semibold hover:border-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 py-3 font-semibold transition-transform hover:-translate-y-0.5 hover:border-gray-900 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <FiHeart size={18} />
                 {isAddingToWishlist ? 'Adding...' : 'Add to Wishlist'}
@@ -248,8 +271,9 @@ const ProductQuickView = ({ product, isOpen, onClose, onAddToCart, onAddToWishli
             </div>
           </div>
         </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

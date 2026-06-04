@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from 'axios';
+import productService from '../services/productService';
 import { useParams, useNavigate } from "react-router-dom";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import Navbar from "../components/Navbar";
@@ -27,10 +27,9 @@ const CreateProduct = () => {
 
   useEffect(() => {
       if (isEdit) {
-          axios
-              .get(`http://localhost:8000/api/v2/product/product/${id}`)
-              .then((response) => {
-                  const p = response.data.product;
+          productService.getProduct(id)
+                  .then((response) => {
+                      const p = response.data.product;
                   setName(p.name);
                   setDescription(p.description);
                   setCategory(p.category);
@@ -39,9 +38,9 @@ const CreateProduct = () => {
                   setStock(p.stock);
                   setEmail(p.email);
                   if (p.images && p.images.length > 0) {
-                      setPreviewImages(
-                          p.images.map((imgPath) => `http://localhost:8000${imgPath}`)
-                      );
+                          setPreviewImages(
+                              p.images.map((imgPath) => `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${imgPath}`)
+                          );
                   }
               })
               .catch((err) => {
@@ -74,25 +73,13 @@ const CreateProduct = () => {
 
         try {
           if (isEdit) {
-            const response = await axios.put(
-                `http://localhost:8000/api/v2/product/update-product/${id}`,
-                formData,
-                {
-                    headers: { "Content-Type": "multipart/form-data" },
-                }
-            );
+            const response = await productService.updateProduct(id, formData);
             if (response.status === 200) {
                 alert("Product updated successfully!");
                 navigate("/my-products");
             }
         } else {
-            const response = await axios.post(
-                "http://localhost:8000/api/v2/product/create-product",
-                formData,
-                {
-                    headers: { "Content-Type": "multipart/form-data" },
-                }
-            );
+            const response = await productService.createProduct(formData);
             if (response.status === 201) {
                 alert("Product created successfully!");
                 setImages([]);
