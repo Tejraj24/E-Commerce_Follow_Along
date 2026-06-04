@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/img/logo.svg';
 import iconsSprite from '../assets/img/icons/icons.svg?url';
 
 const spriteHref = (id) => `${iconsSprite}#${id}`;
 
 const OvermodeHeader = () => {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -51,8 +53,17 @@ const OvermodeHeader = () => {
       return;
     }
 
-    window.location.href = `/search/${searchGender}?q=${encodeURIComponent(searchQuery.trim())}`;
-  }, [searchGender, searchQuery]);
+    const query = encodeURIComponent(searchQuery.trim());
+    setIsSearchOpen(false);
+    setSearchQuery('');
+
+    if (searchGender === 'women') {
+      navigate(`/men?q=${query}`);
+      return;
+    }
+
+    navigate(`/men?q=${query}`);
+  }, [navigate, searchGender, searchQuery]);
 
   const handleMenuLinkClick = useCallback(() => {
     if (isMenuOpen) {
@@ -888,9 +899,94 @@ const OvermodeHeader = () => {
           onClick={toggleMenu}
         />
       )}
-      {isSearchOpen && (
-        <div className="search-overlay" onClick={toggleSearch}></div>
-      )}
+      <AnimatePresence>
+        {isSearchOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="search-overlay fixed inset-0 z-40 bg-black/55 backdrop-blur-sm"
+            onClick={toggleSearch}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 18, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 18, scale: 0.98 }}
+              transition={{ duration: 0.22 }}
+              className="mx-auto mt-24 w-[calc(100%-2rem)] max-w-3xl rounded-[1.75rem] border border-white/10 bg-white p-4 shadow-[0_30px_80px_rgba(0,0,0,0.22)] sm:p-6"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-gray-400">Search the collection</p>
+                  <h2 className="lux-heading mt-2 text-2xl font-semibold text-gray-900">Find premium fashion faster</h2>
+                </div>
+                <button type="button" className="rounded-full bg-gray-100 p-2 text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-900" onClick={toggleSearch} aria-label="Close search">
+                  <svg>
+                    <use href={spriteHref('close')}></use>
+                  </svg>
+                </button>
+              </div>
+              <form
+                id="site-search"
+                className="search__body !min-w-0 !rounded-[1.25rem]"
+                method="GET"
+                action={`/search/${searchGender}`}
+                onSubmit={handleSearchSubmit}
+              >
+                <div className="search__icon">
+                  <svg>
+                    <use href={spriteHref('search')}></use>
+                  </svg>
+                </div>
+                <div className="search__input">
+                  <input
+                    type="text"
+                    name="q"
+                    placeholder="Search premium styles, brands, categories..."
+                    value={searchQuery}
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                  />
+                  <button type="submit" className="search__submit">
+                    <svg>
+                      <use href={spriteHref('arrow')}></use>
+                    </svg>
+                  </button>
+                </div>
+                <div className="search__select select-box">
+                  <div className="options-container">
+                    <div className="option">
+                      <input 
+                        type="radio" 
+                        name="gender" 
+                        id="women" 
+                        value="women" 
+                        checked={searchGender === 'women'}
+                        onChange={() => handleGenderChange('women')}
+                      />
+                      <label htmlFor="women">Women</label>
+                    </div>
+                    <div className="option">
+                      <input 
+                        type="radio" 
+                        name="gender" 
+                        id="men" 
+                        value="men"
+                        checked={searchGender === 'men'}
+                        onChange={() => handleGenderChange('men')}
+                      />
+                      <label htmlFor="men">Men</label>
+                    </div>
+                  </div>
+                  <div className="selected">
+                    {searchGender === 'women' ? 'Women' : 'Men'}
+                  </div>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

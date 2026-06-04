@@ -1,5 +1,5 @@
 /* Enhanced Overmode Styles - Premium E-commerce Design */
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&family=Open+Sans&family=Poppins:wght@500&family=Inter:wght@400;500;600;700&family=Mona+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 /* Reset and Base Styles */
 * {
@@ -42,6 +42,15 @@ body {
   line-height: 1.5;
   font-size: 14px;
 }
+
+/* Headings: luxury serif for premium feel */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', 'Manrope', serif;
+  letter-spacing: -0.01em;
+  color: #0f1720;
+}
+
+.lux-heading { font-family: 'Playfair Display', serif; }
 
 body._lock, body.lock {
   overflow: hidden;

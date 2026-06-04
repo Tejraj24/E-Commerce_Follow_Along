@@ -1,127 +1,131 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import AddressCard from "../components/auth/AddressCard";
-import Navbar from "../components/Navbar";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AddressCard from '../components/auth/AddressCard';
+import userService from '../services/userService';
+import useUserEmail from '../hooks/useUserEmail';
+import { motion } from 'framer-motion';
+import { LoadingState, EmptyState, ErrorState } from '../components/PageState';
+
 export default function Profile() {
-	const [personalDetails, setPersonalDetails] = useState({
-		name: "",
-		email: "",
-		phoneNumber: "",
-		avatarUrl: "",
-	});
-	const [addresses, setAddresses] = useState([]);
-	const navigate = useNavigate();
-	useEffect(() => {
-		fetch(
-			`http://localhost:8000/api/v2/user/profile?email=${"ayan10092018@gmail.com"}`,
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			}
-		)
-			.then((res) => {
-				if (!res.ok) {
-					throw new Error(`HTTP error! status: ${res.status}`);
-				}
-				return res.json();
-			})
-			.then((data) => {
-				setPersonalDetails(data.user);
-				setAddresses(data.addresses);
-				console.log("User fetched:", data.user);
-				console.log("Addresses fetched:", data.addresses);
-			});
-	}, []);
+  const [personalDetails, setPersonalDetails] = useState({
+    name: '',
+    email: '',
+    phoneNumber: '',
+    avatarUrl: '',
+  });
+  const [addresses, setAddresses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const userEmail = useUserEmail();
 
-	const handleAddAddress = () => {
-		navigate("/create-address");
-	};
+  useEffect(() => {
+    userService
+      .getProfile(userEmail)
+      .then((res) => {
+        const data = res.data;
+        setPersonalDetails(data.user);
+        setAddresses(data.addresses || []);
+      })
+      .catch((err) => {
+        console.error('Error fetching profile:', err);
+        setError(err.response?.data?.message || err.message || 'Could not load your profile.');
+      })
+      .finally(() => setLoading(false));
+  }, [userEmail]);
 
-	return (
-		<>
-			<Navbar />
-			<div className="w-full min-h-screen bg-neutral-800 p-5">
-				<div className="w-full h-full bg-neutral-700 rounded-lg">
-					<div className="w-full h-max my-2 p-5">
-						<div className="w-full h-max">
-							<h1 className="text-3xl text-neutral-100">
-								Personal Details
-							</h1>
-						</div>
-						<div className="w-full h-max flex flex-col sm:flex-row p-5 gap-10">
-							<div className="w-40 h-max flex flex-col justify-center items-center gap-y-3">
-								<div className="w-full h-max text-2xl text-neutral-100 text-left">
-									PICTURE
-								</div>
-								<img
-									src={personalDetails.avatarUrl ? `http://localhost:8000/${personalDetails.avatarUrl}` : `https://cdn.vectorstock.com/i/500p/17/61/male-avatar-profile-picture-vector-10211761.jpg`}
-									alt="profile"
-									className="w-40 h-40 rounded-full"
-									onError={(e) => {
-										e.target.onerror = null; // Prevents infinite loop if the default image also fails
-										e.target.src = `https://cdn.vectorstock.com/i/500p/17/61/male-avatar-profile-picture-vector-10211761.jpg`;
-									}}
-								/>
-							</div>
-							<div className="h-max md:flex-grow">
-								<div className="w-full h-max flex flex-col justify-center items-center gap-y-3">
-									<div className="w-full h-max">
-										<div className="text-2xl text-neutral-100 text-left">
-											NAME
-										</div>
-										<div className="text-lg font-light text-neutral-100 text-left break-all">
-											{personalDetails.name}
-										</div>
-									</div>
-									<div className="w-full h-max">
-										<div className="text-2xl text-neutral-100 text-left">
-											EMAIL
-										</div>
-										<div className="text-lg font-light text-neutral-100 text-left break-all">
-											{personalDetails.email}
-										</div>
-									</div>
-									<div className="w-full h-max">
-										<div className="text-2xl text-neutral-100 text-left">
-											MOBILE
-										</div>
-										<div className="text-lg font-light text-neutral-100 text-left break-all">
-											{personalDetails.phoneNumber}
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div className="w-full h-max my-2 p-5">
-						<div className="w-full h-max">
-							<h1 className="text-3xl text-neutral-100">
-								Addresses
-							</h1>
-						</div>
-						<div className="w-full h-max p-5">
-							<button
-								className="w-max px-3 py-2 bg-neutral-600 text-neutral-100 rounded-md text-center hover:bg-neutral-100 hover:text-black transition-all duration-100"
-								onClick={handleAddAddress}
-							>
-								Add Address
-							</button>
-						</div>
-						<div className="w-full h-max flex flex-col gap-5 p-5">
-							{addresses.length === 0 ? (
-								<div className="w-full h-max text-neutral-100 font-light text-left">
-									No Addresses Found
-								</div>
-							) : null}
-							{addresses.map((address, index) => (
-								<AddressCard key={index} {...address} />
-							))}
-						</div>
-					</div>
-				</div>
-			</div>
-		</>
-	);
+  const handleAddAddress = () => {
+    navigate('/create-address');
+  };
+
+  if (loading) {
+    return <LoadingState title="Loading profile" subtitle="We're fetching your account information and saved addresses." />;
+  }
+
+  if (error) {
+    return (
+      <ErrorState
+        title="Profile unavailable"
+        message={error}
+        actionLabel="Retry"
+        onAction={() => window.location.reload()}
+      />
+    );
+  }
+
+  const imageBase = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  const avatarSrc = personalDetails.avatarUrl
+    ? `${imageBase}/${personalDetails.avatarUrl}`
+    : 'https://cdn.vectorstock.com/i/500p/17/61/male-avatar-profile-picture-vector-10211761.jpg';
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
+      className="min-h-screen w-full overflow-x-hidden bg-[#f6f5f3]"
+    >
+      <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
+        <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+          <section className="min-w-0 rounded-[1.75rem] border border-gray-100 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-6">
+            <p className="text-xs uppercase tracking-[0.3em] text-gray-400">Account</p>
+            <h1 className="lux-heading mt-2 text-3xl font-semibold text-gray-900">Personal Details</h1>
+            <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-center">
+              <img
+                src={avatarSrc}
+                alt="Profile"
+                className="h-32 w-32 shrink-0 rounded-full object-cover ring-4 ring-gray-100 sm:h-40 sm:w-40"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'https://cdn.vectorstock.com/i/500p/17/61/male-avatar-profile-picture-vector-10211761.jpg';
+                }}
+              />
+              <div className="grid min-w-0 flex-1 gap-4">
+                <div className="rounded-[1.25rem] border border-gray-100 p-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-gray-400">Name</p>
+                  <p className="mt-2 break-words text-lg font-medium text-gray-900">{personalDetails.name || '—'}</p>
+                </div>
+                <div className="rounded-[1.25rem] border border-gray-100 p-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-gray-400">Email</p>
+                  <p className="mt-2 break-all text-lg font-medium text-gray-900">{personalDetails.email || userEmail}</p>
+                </div>
+                <div className="rounded-[1.25rem] border border-gray-100 p-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-gray-400">Mobile</p>
+                  <p className="mt-2 break-words text-lg font-medium text-gray-900">{personalDetails.phoneNumber || '—'}</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="min-w-0 rounded-[1.75rem] border border-gray-100 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-gray-400">Saved places</p>
+                <h2 className="lux-heading mt-2 text-3xl font-semibold text-gray-900">Addresses</h2>
+              </div>
+              <button
+                type="button"
+                className="inline-flex min-h-11 items-center justify-center rounded-full bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 hover:bg-black"
+                onClick={handleAddAddress}
+              >
+                Add Address
+              </button>
+            </div>
+            <div className="mt-6 space-y-4">
+              {addresses.length === 0 ? (
+                <EmptyState
+                  title="No addresses yet"
+                  message="Add a shipping or billing address to speed up checkout."
+                  actionLabel="Add address"
+                  onAction={handleAddAddress}
+                />
+              ) : (
+                addresses.map((address, index) => <AddressCard key={address._id || index} {...address} />)
+              )}
+            </div>
+          </section>
+        </div>
+      </div>
+    </motion.div>
+  );
 }

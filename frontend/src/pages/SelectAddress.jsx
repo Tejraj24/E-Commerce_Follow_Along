@@ -1,112 +1,107 @@
-// SelectAddress.jsx
-import React, { useState, useEffect } from 'react';
-import NavBar from '../components/auth/nav'; // Ensure the path is correct and component name matches
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-// Optionally, if you have a context or a way to get the authenticated user's email, import it
-// import { useAuth } from '../contexts/AuthContext';
+import userService from '../services/userService';
+import useUserEmail from '../hooks/useUserEmail';
+import { motion } from 'framer-motion';
+import { LoadingState, ErrorState, EmptyState } from '../components/PageState';
+
 const SelectAddress = () => {
-    const [addresses, setAddresses] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
-    // Optionally, get the authenticated user's email from context or props
-    // const { user } = useAuth();
-    const userEmail = 'ayan10092018@gmail.com'; // Replace with dynamic email in production
-    useEffect(() => {
-        const fetchAddresses = async () => {
-            try {
-                const response = await axios.get('http://localhost:8000/api/v2/user/addresses', {
-                    params: { email: userEmail },
-                });
-                if (response.status !== 200) {
-                    // Handle specific HTTP errors
-                    if (response.status === 404) {
-                        throw new Error('User not found.');
-                    } else if (response.status === 400) {
-                        throw new Error('Bad request. Email parameter is missing.');
-                    } else {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                }
-                const data = response.data;
-                // Validate the response structure
-                if (data && Array.isArray(data.addresses)) {
-                    setAddresses(data.addresses);
-                } else {
-                    setAddresses([]);
-                    console.warn('Unexpected response structure:', data);
-                }
-            } catch (err) {
-                console.error('Error fetching addresses:', err);
-                setError(err.response?.data?.message || err.message || 'An unexpected error occurred.');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchAddresses();
-    }, [userEmail]);
-    const handleSelectAddress = (addressId) => {
-        // Navigate to Order Confirmation with the selected address ID and email
-        navigate('/order-confirmation', { state: { addressId, email: userEmail } });
+  const [addresses, setAddresses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const userEmail = useUserEmail();
+
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      try {
+        const response = await userService.getAddresses(userEmail);
+        const data = response.data;
+        if (data && Array.isArray(data.addresses)) {
+          setAddresses(data.addresses);
+        } else {
+          setAddresses([]);
+        }
+      } catch (err) {
+        console.error('Error fetching addresses:', err);
+        setError(err.response?.data?.message || err.message || 'An unexpected error occurred.');
+      } finally {
+        setLoading(false);
+      }
     };
-    // Render loading state
-    if (loading) {
-        return (
-            <div className='w-full h-screen flex justify-center items-center'>
-                <p className='text-lg'>Loading addresses...</p>
-            </div>
-        );
-    }
-    // Render error state
-    if (error) {
-        return (
-            <div className='w-full h-screen flex flex-col justify-center items-center'>
-                <p className='text-red-500 text-lg mb-4'>Error: {error}</p>
-                <button
-                    onClick={() => window.location.reload()}
-                    className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
-                >
-                    Retry
-                </button>
-            </div>
-        );
-    }
+
+    fetchAddresses();
+  }, [userEmail]);
+
+  const handleSelectAddress = (addressId) => {
+    navigate('/order-confirmation', { state: { addressId, email: userEmail } });
+  };
+
+  if (loading) {
+    return <LoadingState title="Loading addresses" subtitle="We're fetching your saved shipping destinations." />;
+  }
+
+  if (error) {
     return (
-        <div className='w-full min-h-screen flex flex-col'>
-            <NavBar />
-            <div className='flex-grow flex justify-center items-center p-4'>
-                <div className='w-full max-w-4xl border border-neutral-300 rounded-md flex flex-col p-6 bg-white shadow-md'>
-                    <h2 className='text-2xl font-semibold mb-6 text-center'>Select Shipping Address</h2>
-                    {addresses.length > 0 ? (
-                        <div className='space-y-4 overflow-auto max-h-96'>
-                            {addresses.map((address) => (
-                                <div
-                                    key={address._id}
-                                    className='border p-4 rounded-md flex justify-between items-center hover:shadow-md transition-shadow'
-                                >
-                                    <div>
-                                        <p className='font-medium'>
-                                            {address.address1}{address.address2 ? `, ${address.address2}` : ''}, {address.city}, {address.state}, {address.zipCode}
-                                        </p>
-                                        <p className='text-sm text-gray-600'>{address.country}</p>
-                                        <p className='text-sm text-gray-500'>Type: {address.addressType || 'N/A'}</p>
-                                    </div>
-                                    <button
-                                        onClick={() => handleSelectAddress(address._id)}
-                                        className='bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400'
-                                    >
-                                        Select
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <p className='text-center text-gray-700'>No addresses found. Please add an address.</p>
-                    )}
-                </div>
-            </div>
-        </div>
+      <ErrorState
+        title="Could not load addresses"
+        message={error}
+        actionLabel="Retry"
+        onAction={() => window.location.reload()}
+      />
     );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
+      className="flex min-h-screen w-full flex-col overflow-x-hidden bg-[#f6f5f3]"
+    >
+      <div className="flex-grow px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
+        <div className="mx-auto w-full max-w-4xl rounded-[1.75rem] border border-gray-100 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-6">
+          <div className="mb-6 text-center">
+            <p className="text-xs uppercase tracking-[0.3em] text-gray-400">Checkout</p>
+            <h2 className="lux-heading mt-2 text-3xl font-semibold text-gray-900">Select Shipping Address</h2>
+          </div>
+          {addresses.length > 0 ? (
+            <div className="max-h-[30rem] space-y-4 overflow-y-auto pr-1">
+              {addresses.map((address) => (
+                <div
+                  key={address._id}
+                  className="flex flex-col gap-4 rounded-[1.25rem] border border-gray-100 p-4 transition-shadow hover:shadow-md sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="min-w-0">
+                    <p className="break-words font-medium text-gray-900">
+                      {address.address1}
+                      {address.address2 ? `, ${address.address2}` : ''}, {address.city}, {address.zipCode}
+                    </p>
+                    <p className="text-sm text-gray-600">{address.country}</p>
+                    <p className="text-sm text-gray-500">Type: {address.addressType || 'N/A'}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleSelectAddress(address._id)}
+                    className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 hover:bg-black"
+                  >
+                    Select
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              title="No addresses found"
+              message="Add a shipping address to continue checkout."
+              actionLabel="Add address"
+              onAction={() => navigate('/create-address')}
+            />
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
 };
+
 export default SelectAddress;

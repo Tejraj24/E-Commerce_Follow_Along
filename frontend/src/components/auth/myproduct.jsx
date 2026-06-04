@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import productService from '../../services/productService';
 
 function Myproduct({ _id, name, images, description, price }) {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,12 +22,9 @@ function Myproduct({ _id, name, images, description, price }) {
 
     const handleDelete = async () => {
         try {
-            const response = await axios.delete(
-                `http://localhost:8000/api/v2/product/delete-product/${_id}`
-            );
+            const response = await productService.deleteProduct(_id);
             if (response.status === 200) {
                 alert("Product deleted successfully!");
-                // Reload the page or fetch products again
                 window.location.reload();
             }
         } catch (err) {
@@ -40,9 +37,9 @@ function Myproduct({ _id, name, images, description, price }) {
         <>
             <div className="bg-neutral-200 p-4 rounded-lg shadow-md flex flex-col justify-between">
                 <div className="w-full">
-                    {currentImage && (
+                        {currentImage && (
                         <img
-                            src={`http://localhost:8000${currentImage}`}
+                            src={`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${currentImage}`}
                             alt={name}
                             className="w-full h-56 object-cover rounded-lg mb-2"
                         />

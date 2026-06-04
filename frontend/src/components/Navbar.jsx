@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { FiSearch, FiUser, FiShoppingBag, FiMenu, FiX, FiChevronDown } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
@@ -165,7 +166,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
+    <motion.div initial={{ y: -10 }} animate={{ y: 0 }} transition={{ duration: 0.35 }} className="sticky top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100">
       {/* Search Overlay */}
       {isSearchOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-20">
@@ -211,9 +212,9 @@ const Navbar = () => {
       <div className="relative mx-auto max-w-[2560px] overflow-hidden bg-white px-5 py-3 lg:px-5">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex-1">
+          <div className="flex-1 flex items-center">
             <Link to="/" className="inline-block">
-              <span className="text-xl font-bold">OVERMODE</span>
+              <span className="text-2xl lux-heading font-extrabold tracking-wide">OVERMODE</span>
             </Link>
           </div>
           
@@ -312,12 +313,19 @@ const Navbar = () => {
             </div>
             
             <div className="flex items-center space-x-4">
-              <button 
-                onClick={() => setIsSearchOpen(true)}
-                className="p-2 hover:text-gray-600"
-              >
-                <FiSearch size={20} />
-              </button>
+              <div className="hidden md:flex items-center">
+                <form onSubmit={(e) => { e.preventDefault(); setIsSearchOpen(true); }} className="hidden lg:flex items-center w-full max-w-sm">
+                  <div className="search__body w-full">
+                    <div className="search__icon"><FiSearch size={16} /></div>
+                    <div className="search__input">
+                      <input placeholder="Search premium styles, brands..." aria-label="Search" className="w-full bg-transparent" />
+                    </div>
+                  </div>
+                </form>
+                <button onClick={() => setIsSearchOpen(true)} className="p-2 hover:text-gray-600 lg:hidden">
+                  <FiSearch size={20} />
+                </button>
+              </div>
               <Link to="/account" className="p-2 hover:text-gray-600 hidden lg:block">
                 <FiUser size={20} />
               </Link>
@@ -401,7 +409,7 @@ const Navbar = () => {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

@@ -17,7 +17,7 @@ function Product({ _id, name, images, description, price }) {
     return (
         <div className="bg-neutral-200 p-4 rounded-lg shadow-md flex flex-col justify-between">
       <div className="w-full ">
-        <img src={`http://localhost:8000${currentImage}`} // Ensure the URL is correct\
+        <img src={`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${currentImage}`}
           alt={name}
           className="w-full h-56 object-cover rounded-lg mb-2"
         />
