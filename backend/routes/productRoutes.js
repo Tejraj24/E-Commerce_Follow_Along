@@ -6,6 +6,7 @@ const { pupload } = require('../multer');
 
 router.post('/create-product', pupload.array('images', 10), catchAsyncErrors(productController.createProduct));
 router.get('/get-products', catchAsyncErrors(productController.getProducts));
+router.get('/suggestions', catchAsyncErrors(productController.getSuggestions));
 router.get('/my-products', catchAsyncErrors(productController.getMyProducts));
 router.get('/product/:id', catchAsyncErrors(productController.getProductById));
 router.put('/update-product/:id', pupload.array('images', 10), catchAsyncErrors(productController.updateProduct));

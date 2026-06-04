@@ -30,9 +30,76 @@ const createProduct = async ({ body, files }) => {
   return newProduct;
 };
 
-const getProducts = async () => {
-  const products = await Product.find();
-  return products.map((product) => product);
+const getProducts = async ({ q } = {}) => {
+  if (q && q.trim()) {
+    const searchTerm = q.trim();
+    // Try text search first (requires text index)
+    try {
+      const products = await Product.find(
+        { $text: { $search: searchTerm } },
+        { score: { $meta: 'textScore' } }
+      ).sort({ score: { $meta: 'textScore' } });
+      if (products.length > 0) return products;
+    } catch (err) {
+      // Text index may not exist yet; fall through to regex
+    }
+    // Fallback: case-insensitive regex on name, description, category
+    const regex = new RegExp(searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+    const products = await Product.find({
+      $or: [
+        { name: regex },
+        { description: regex },
+        { category: regex },
+        { brand: regex },
+        { tags: regex },
+      ],
+    }).sort({ createdAt: -1 });
+    return products;
+  }
+  const products = await Product.find().sort({ createdAt: -1 });
+  return products;
+};
+
+const getSuggestions = async ({ q }) => {
+  if (!q || !q.trim()) return [];
+  const searchTerm = q.trim();
+  const regex = new RegExp(searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+
+  // Get matching products (lightweight: only name, category, brand, images)
+  const products = await Product.find(
+    { $or: [{ name: regex }, { category: regex }, { brand: regex }, { tags: regex }] },
+    { name: 1, category: 1, brand: 1, images: 1 }
+  ).limit(8);
+
+  // Build suggestions: deduplicated product names + category matches
+  const suggestions = [];
+  const seen = new Set();
+
+  for (const p of products) {
+    if (!seen.has(p.name)) {
+      seen.add(p.name);
+      suggestions.push({
+        type: 'product',
+        text: p.name,
+        category: p.category,
+        image: p.images?.[0] || null,
+        id: p._id,
+      });
+    }
+  }
+
+  // Add unique category suggestions
+  const categories = await Product.distinct('category', {
+    category: regex,
+  });
+  for (const cat of categories.slice(0, 4)) {
+    if (!seen.has(`cat:${cat}`)) {
+      seen.add(`cat:${cat}`);
+      suggestions.push({ type: 'category', text: cat });
+    }
+  }
+
+  return suggestions.slice(0, 8);
 };
 
 const getMyProducts = async ({ email }) => {
@@ -113,6 +180,7 @@ const updateCartQuantity = async ({ email, productId, quantity }) => {
 module.exports = {
   createProduct,
   getProducts,
+  getSuggestions,
   getMyProducts,
   getProductById,
   updateProduct,

@@ -34,6 +34,20 @@ const productSchema = new mongoose.Schema(
       type: [String], // Array of image URLs (base64 or hosted links)
       required: [true, "Please upload product images"],
     },
+    brand: {
+      type: String,
+      default: '',
+    },
+    rating: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5,
+    },
+    soldCount: {
+      type: Number,
+      default: 0,
+    },
     createdAt: {
       type: Date,
       default: Date.now, // Automatically set the creation date
@@ -43,4 +57,11 @@ const productSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Compound text index for full-text search across key fields
+productSchema.index(
+  { name: 'text', description: 'text', category: 'text', tags: 'text', brand: 'text' },
+  { weights: { name: 10, brand: 5, category: 5, tags: 3, description: 1 } }
+);
+
 module.exports = mongoose.model("Product", productSchema);

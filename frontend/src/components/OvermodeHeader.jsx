@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/img/logo.svg';
 import iconsSprite from '../assets/img/icons/icons.svg?url';
+import SearchBar from './SearchBar';
+import '../styles/search.css';
 
 const spriteHref = (id) => `${iconsSprite}#${id}`;
 
@@ -47,7 +49,7 @@ const OvermodeHeader = () => {
   }, []);
 
   const handleSearchSubmit = useCallback((event) => {
-    event.preventDefault();
+    if (event) event.preventDefault();
 
     if (!searchQuery.trim()) {
       return;
@@ -56,14 +58,8 @@ const OvermodeHeader = () => {
     const query = encodeURIComponent(searchQuery.trim());
     setIsSearchOpen(false);
     setSearchQuery('');
-
-    if (searchGender === 'women') {
-      navigate(`/men?q=${query}`);
-      return;
-    }
-
-    navigate(`/men?q=${query}`);
-  }, [navigate, searchGender, searchQuery]);
+    navigate(`/search?q=${query}`);
+  }, [navigate, searchQuery]);
 
   const handleMenuLinkClick = useCallback(() => {
     if (isMenuOpen) {
@@ -931,7 +927,7 @@ const OvermodeHeader = () => {
                 id="site-search"
                 className="search__body !min-w-0 !rounded-[1.25rem]"
                 method="GET"
-                action={`/search/${searchGender}`}
+                action="/search"
                 onSubmit={handleSearchSubmit}
               >
                 <div className="search__icon">
@@ -939,48 +935,12 @@ const OvermodeHeader = () => {
                     <use href={spriteHref('search')}></use>
                   </svg>
                 </div>
-                <div className="search__input">
-                  <input
-                    type="text"
-                    name="q"
+                <div className="search__input" style={{ position: 'relative' }}>
+                  <SearchBar
+                    initialQuery={searchQuery}
+                    onSubmit={() => { setIsSearchOpen(false); setSearchQuery(''); }}
                     placeholder="Search premium styles, brands, categories..."
-                    value={searchQuery}
-                    onChange={(event) => setSearchQuery(event.target.value)}
                   />
-                  <button type="submit" className="search__submit">
-                    <svg>
-                      <use href={spriteHref('arrow')}></use>
-                    </svg>
-                  </button>
-                </div>
-                <div className="search__select select-box">
-                  <div className="options-container">
-                    <div className="option">
-                      <input 
-                        type="radio" 
-                        name="gender" 
-                        id="women" 
-                        value="women" 
-                        checked={searchGender === 'women'}
-                        onChange={() => handleGenderChange('women')}
-                      />
-                      <label htmlFor="women">Women</label>
-                    </div>
-                    <div className="option">
-                      <input 
-                        type="radio" 
-                        name="gender" 
-                        id="men" 
-                        value="men"
-                        checked={searchGender === 'men'}
-                        onChange={() => handleGenderChange('men')}
-                      />
-                      <label htmlFor="men">Men</label>
-                    </div>
-                  </div>
-                  <div className="selected">
-                    {searchGender === 'women' ? 'Women' : 'Men'}
-                  </div>
                 </div>
               </form>
             </motion.div>

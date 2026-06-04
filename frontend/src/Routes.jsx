@@ -11,6 +11,7 @@ import SelectAddress from "./pages/SelectAddress.jsx";
 import OrderConfirmation from "./pages/OrderConfirmation.jsx";
 import MenProducts_simple from "./pages/MenProducts_simple.jsx";
 import MensBestsellers from "./pages/MensBestsellers.jsx";
+import SearchResults from "./pages/SearchResults.jsx";
 
 export { 
   SignupPage, 
@@ -25,5 +26,6 @@ export {
   SelectAddress, 
   OrderConfirmation,
   MenProducts_simple as MenProducts,
-  MensBestsellers
+  MensBestsellers,
+  SearchResults
 };

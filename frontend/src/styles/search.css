@@ -1,0 +1,332 @@
+/* ============================================================
+   Phase 4A: Search Bar, Suggestions Dropdown & Search Results
+   ============================================================ */
+
+/* --- Search Bar Wrapper (inline inside header overlay) --- */
+.search-bar-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-bar-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: #1a1a1a;
+  padding: 0;
+  font-family: inherit;
+}
+
+.search-bar-input::placeholder {
+  color: #9ca3af;
+}
+
+/* --- Suggestions Dropdown --- */
+.search-suggestions-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);
+  z-index: 100;
+  overflow: hidden;
+  animation: searchDropdownIn 0.18s ease-out;
+}
+
+@keyframes searchDropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-suggestion-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.search-suggestion-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #111;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --- Individual Suggestion Item --- */
+.search-suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.875rem;
+  color: #1a1a1a;
+  transition: background-color 0.12s ease;
+}
+
+.search-suggestion-item:hover,
+.search-suggestion-item.selected {
+  background: #f5f5f5;
+}
+
+.search-suggestion-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+  background: #f3f4f6;
+}
+
+.search-suggestion-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  flex-shrink: 0;
+  color: #6b7280;
+}
+
+.search-suggestion-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-suggestion-name {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-suggestion-category {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 1px;
+}
+
+.search-suggestion-arrow {
+  color: #d1d5db;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: color 0.12s ease;
+}
+
+.search-suggestion-item:hover .search-suggestion-arrow,
+.search-suggestion-item.selected .search-suggestion-arrow {
+  color: #111;
+}
+
+.search-suggestion-viewall {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  border: none;
+  border-top: 1px solid #f3f4f6;
+  background: #fafafa;
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: #6b7280;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.search-suggestion-viewall:hover {
+  background: #f0f0f0;
+  color: #111;
+}
+
+.search-suggestion-viewall strong {
+  color: #111;
+}
+
+/* ============================================================
+   Search Results Page
+   ============================================================ */
+.search-results {
+  min-height: 60vh;
+}
+
+.search-results__header {
+  padding: 32px 0 24px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.search-results__title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #111;
+  margin: 0 0 4px;
+}
+
+.search-results__subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.search-results__count {
+  font-weight: 600;
+  color: #111;
+}
+
+.search-results__body {
+  padding: 32px 0;
+}
+
+.search-results__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+@media (min-width: 640px) {
+  .search-results__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .search-results__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .search-results__grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* --- Empty State --- */
+.search-results__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.search-results__empty-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 24px;
+  color: #d1d5db;
+}
+
+.search-results__empty-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 8px;
+}
+
+.search-results__empty-text {
+  font-size: 0.9375rem;
+  color: #9ca3af;
+  max-width: 360px;
+  line-height: 1.5;
+}
+
+/* --- Loading Skeleton --- */
+.search-results__skeleton {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+@media (min-width: 640px) {
+  .search-results__skeleton {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .search-results__skeleton {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+}
+
+.search-skeleton-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.search-skeleton-card__img {
+  width: 100%;
+  padding-bottom: 125%;
+  background: linear-gradient(110deg, #f3f4f6 30%, #e5e7eb 50%, #f3f4f6 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 10px;
+}
+
+.search-skeleton-card__line {
+  height: 12px;
+  border-radius: 6px;
+  margin-top: 10px;
+  background: linear-gradient(110deg, #f3f4f6 30%, #e5e7eb 50%, #f3f4f6 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.search-skeleton-card__line--short {
+  width: 60%;
+}
+
+.search-skeleton-card__line--price {
+  width: 35%;
+  height: 16px;
+  margin-top: 12px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* --- Search Results Toolbar --- */
+.search-results__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.search-results__showing {
+  font-size: 0.8125rem;
+  color: #6b7280;
+}

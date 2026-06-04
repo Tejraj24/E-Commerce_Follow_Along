@@ -12,7 +12,8 @@ import {
   SelectAddress, 
   OrderConfirmation,
   MenProducts,
-  MensBestsellers
+  MensBestsellers,
+  SearchResults
 } from "./Routes.jsx";
 import Home_working from "./pages/Home_working.jsx";
 import OvermodeHeader from "./components/OvermodeHeader.jsx";
@@ -113,6 +114,7 @@ function App() {
             <Route path="/order-confirmation" element={<OrderConfirmation />} />
             <Route path="/men" element={<MenProducts />} />
             <Route path="/collections/mens-bestsellers" element={<MensBestsellers />} />
+            <Route path="/search" element={<SearchResults />} />
           </Routes>
         </main>
         <Footer />

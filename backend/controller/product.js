@@ -6,8 +6,15 @@ const createProduct = async (req, res, next) => {
 };
 
 const getProducts = async (req, res, next) => {
-  const products = await productService.getProducts();
+  const { q } = req.query;
+  const products = await productService.getProducts({ q });
   res.status(200).json({ products });
+};
+
+const getSuggestions = async (req, res, next) => {
+  const { q } = req.query;
+  const suggestions = await productService.getSuggestions({ q });
+  res.status(200).json({ suggestions });
 };
 
 const getMyProducts = async (req, res, next) => {
@@ -55,6 +62,7 @@ const updateCartQuantity = async (req, res, next) => {
 module.exports = {
   createProduct,
   getProducts,
+  getSuggestions,
   getMyProducts,
   getProductById,
   updateProduct,
