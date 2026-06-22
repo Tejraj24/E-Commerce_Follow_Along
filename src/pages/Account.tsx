@@ -14,6 +14,7 @@ interface Profile {
   address_line1: string | null;
   address_line2: string | null;
   city: string | null;
+  state: string | null;
   postal_code: string | null;
   country: string | null;
 }
@@ -38,11 +39,11 @@ const Account = () => {
     if (!user) return;
     (async () => {
       const [profileRes, ordersRes] = await Promise.all([
-        supabase.from("profiles").select("full_name, phone, address_line1, address_line2, city, postal_code, country").eq("id", user.id).maybeSingle(),
+        supabase.from("profiles").select("full_name, phone, address_line1, address_line2, city, state, postal_code, country").eq("id", user.id).maybeSingle(),
         supabase.from("orders").select("id, status, total_cents, currency, items, created_at").eq("user_id", user.id).order("created_at", { ascending: false }),
       ]);
       if (profileRes.data) setProfile(profileRes.data as Profile);
-      else setProfile({ full_name: "", phone: "", address_line1: "", address_line2: "", city: "", postal_code: "", country: "" });
+      else setProfile({ full_name: "", phone: "", address_line1: "", address_line2: "", city: "", state: "", postal_code: "", country: "India" });
       if (ordersRes.data) setOrders(ordersRes.data as Order[]);
       setLoadingData(false);
     })();
@@ -104,7 +105,11 @@ const Account = () => {
                 <Input value={profile.city ?? ""} onChange={(e) => update("city", e.target.value)} maxLength={100} className="mt-1" />
               </div>
               <div>
-                <Label className="font-light">Postal code</Label>
+                <Label className="font-light">State</Label>
+                <Input value={profile.state ?? ""} onChange={(e) => update("state", e.target.value)} maxLength={100} className="mt-1" />
+              </div>
+              <div>
+                <Label className="font-light">PIN code</Label>
                 <Input value={profile.postal_code ?? ""} onChange={(e) => update("postal_code", e.target.value)} maxLength={20} className="mt-1" />
               </div>
               <div className="md:col-span-2">
@@ -140,8 +145,8 @@ const Account = () => {
                     </p>
                   </div>
                   <p className="text-sm font-light">
-                    {o.currency === "EUR" ? "€" : o.currency + " "}
-                    {(o.total_cents / 100).toLocaleString()}
+                    {o.currency === "INR" || o.currency === "EUR" ? "₹" : o.currency + " "}
+                    {(o.total_cents / 100).toLocaleString('en-IN')}
                   </p>
                 </li>
               ))}

@@ -18,7 +18,9 @@ const CustomStar = ({ filled, className }: { filled: boolean; className?: string
   </svg>
 );
 
-const ProductDescription = () => {
+import { Product } from "@/data/products";
+
+const ProductDescription = ({ product }: { product: Product }) => {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isCareOpen, setIsCareOpen] = useState(false);
@@ -42,16 +44,11 @@ const ProductDescription = () => {
         </Button>
         {isDescriptionOpen && (
           <div className="pb-6 space-y-4">
-            <p className="text-sm font-light text-muted-foreground leading-relaxed">
-              The Pantheon earrings embody architectural elegance with their clean, geometric design. 
-              Inspired by classical Roman architecture, these statement pieces feature a sophisticated 
-              interplay of curves and angles that catch and reflect light beautifully.
-            </p>
-            <p className="text-sm font-light text-muted-foreground leading-relaxed">
-              Each earring is meticulously crafted from premium sterling silver with an 18k gold 
-              plating, ensuring both durability and luxury. The minimalist aesthetic makes them 
-              perfect for both everyday wear and special occasions.
-            </p>
+            {product.description.map((para, index) => (
+              <p key={index} className="text-sm font-light text-muted-foreground leading-relaxed">
+                {para}
+              </p>
+            ))}
           </div>
         )}
       </div>
@@ -71,22 +68,22 @@ const ProductDescription = () => {
           )}
         </Button>
         {isDetailsOpen && (
-          <div className="pb-6 space-y-3">
-            <div className="flex justify-between">
-              <span className="text-sm font-light text-muted-foreground">SKU</span>
-              <span className="text-sm font-light text-foreground">LE-PTH-001</span>
+          <div className="pb-6 space-y-6 text-sm font-light text-muted-foreground">
+            <div>
+              <p className="font-normal text-foreground mb-1">Material</p>
+              <p>{product.material}</p>
             </div>
-            <div className="flex justify-between">
-              <span className="text-sm font-light text-muted-foreground">Collection</span>
-              <span className="text-sm font-light text-foreground">Architectural Series</span>
+            <div>
+              <p className="font-normal text-foreground mb-1">Dimensions</p>
+              <p>{product.dimensions}</p>
             </div>
-            <div className="flex justify-between">
-              <span className="text-sm font-light text-muted-foreground">Closure</span>
-              <span className="text-sm font-light text-foreground">Post and butterfly back</span>
+            <div>
+              <p className="font-normal text-foreground mb-1">Weight</p>
+              <p>{product.weight}</p>
             </div>
-            <div className="flex justify-between">
-              <span className="text-sm font-light text-muted-foreground">Hypoallergenic</span>
-              <span className="text-sm font-light text-foreground">Yes</span>
+            <div>
+              <p className="font-normal text-foreground mb-1">Editor's notes</p>
+              <p className="italic">{product.editorNotes}</p>
             </div>
           </div>
         )}

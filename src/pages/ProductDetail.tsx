@@ -6,6 +6,7 @@ import ProductImageGallery from "../components/product/ProductImageGallery";
 import ProductInfo from "../components/product/ProductInfo";
 import ProductDescription from "../components/product/ProductDescription";
 import ProductCarousel from "../components/content/ProductCarousel";
+import { products } from "@/data/products";
 import { 
   Breadcrumb, 
   BreadcrumbItem, 
@@ -17,6 +18,20 @@ import {
 
 const ProductDetail = () => {
   const { productId } = useParams();
+  const product = products.find(p => p.id === productId);
+
+  if (!product) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="pt-24 px-6 text-center">
+          <h1 className="text-2xl font-light">Product not found</h1>
+          <Link to="/" className="text-sm font-light underline mt-4 block">Return Home</Link>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -36,23 +51,23 @@ const ProductDetail = () => {
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link to="/category/earrings">Earrings</Link>
+                    <Link to={`/category/${product.category.toLowerCase()}`}>{product.category}</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Pantheon</BreadcrumbPage>
+                  <BreadcrumbPage>{product.name}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-            <ProductImageGallery />
+            <ProductImageGallery product={product} />
             
             <div className="lg:pl-12 mt-8 lg:mt-0 lg:sticky lg:top-6 lg:h-fit">
-              <ProductInfo />
-              <ProductDescription />
+              <ProductInfo product={product} />
+              <ProductDescription product={product} />
             </div>
           </div>
         </section>

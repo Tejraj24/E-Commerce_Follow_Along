@@ -5,11 +5,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-8">
           {/* Brand - Left side */}
           <div>
-            <img 
-              src="/Linea_Jewelry_Inc-2.svg" 
-              alt="Linea Jewelry Inc." 
-              className="mb-4 h-6 w-auto"
-            />
+            <span className="text-xl font-light tracking-widest uppercase">Shivi</span>
             <p className="text-sm font-light text-black/70 leading-relaxed max-w-md mb-6">
               Minimalist jewelry crafted for the modern individual
             </p>
@@ -18,13 +14,13 @@ const Footer = () => {
             <div className="space-y-2 text-sm font-light text-black/70">
               <div>
                 <p className="font-normal text-black mb-1">Visit Us</p>
-                <p>123 Madison Avenue</p>
-                <p>New York, NY 10016</p>
+                <p>14, Johari Bazar Road</p>
+                <p>Jaipur, Rajasthan 302003</p>
               </div>
               <div>
                 <p className="font-normal text-black mb-1 mt-3">Contact</p>
-                <p>+1 (212) 555-0123</p>
-                <p>hello@lineajewelry.com</p>
+                <p>+91 141 256 1234</p>
+                <p>hello@shivijewelry.com</p>
               </div>
             </div>
           </div>
@@ -72,10 +68,7 @@ const Footer = () => {
       <div className="border-t border-[#e5e5e5] -mx-6 px-6 pt-2">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm font-light text-black mb-1 md:mb-0">
-            © 2024 Linea. All rights reserved. Template made by{" "}
-            <a href="https://www.liljeros.co" target="_blank" rel="noopener noreferrer" className="hover:text-black/70 transition-colors underline">
-              Rickard Liljeros
-            </a>
+            © {new Date().getFullYear()} Shivi. All rights reserved.
           </p>
           <div className="flex space-x-6">
             <a href="/privacy-policy" className="text-sm font-light text-black hover:text-black/70 transition-colors">

@@ -53,7 +53,7 @@ const Auth = () => {
           },
         });
         if (error) throw error;
-        toast.success("Account created. Welcome to LINEA.");
+        toast.success("Account created. Welcome to SHIVI.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email: emailParse.data,
@@ -89,7 +89,7 @@ const Auth = () => {
         <p className="text-sm text-muted-foreground text-center mb-10 font-light">
           {mode === "signin"
             ? "Access your orders and saved items"
-            : "Join LINEA to manage orders and favorites"}
+            : "Join SHIVI to manage orders and favorites"}
         </p>
 
         <Button
@@ -154,7 +154,7 @@ const Auth = () => {
         </form>
 
         <p className="text-center text-sm text-muted-foreground mt-8 font-light">
-          {mode === "signin" ? "New to LINEA?" : "Already have an account?"}{" "}
+          {mode === "signin" ? "New to SHIVI?" : "Already have an account?"}{" "}
           <button
             type="button"
             onClick={() => setMode(mode === "signin" ? "signup" : "signin")}

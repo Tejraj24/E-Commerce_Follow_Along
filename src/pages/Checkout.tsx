@@ -22,8 +22,9 @@ const Checkout = () => {
   const [shippingAddress, setShippingAddress] = useState({
     address: "",
     city: "",
+    state: "",
     postalCode: "",
-    country: ""
+    country: "India"
   });
   const [hasSeparateBilling, setHasSeparateBilling] = useState(false);
   const [billingDetails, setBillingDetails] = useState({
@@ -33,8 +34,9 @@ const Checkout = () => {
     phone: "",
     address: "",
     city: "",
+    state: "",
     postalCode: "",
-    country: ""
+    country: "India"
   });
   const [shippingOption, setShippingOption] = useState("standard");
   const [paymentDetails, setPaymentDetails] = useState({
@@ -51,7 +53,7 @@ const Checkout = () => {
     {
       id: 1,
       name: "Pantheon Ring",
-      price: "€2,450",
+      price: "₹2,45,000",
       quantity: 1,
       image: pantheonImage,
       size: "54 EU / 7 US"
@@ -59,7 +61,7 @@ const Checkout = () => {
     {
       id: 2,
       name: "Eclipse Earrings", 
-      price: "€1,850",
+      price: "₹1,85,000",
       quantity: 1,
       image: eclipseImage
     }
@@ -78,16 +80,16 @@ const Checkout = () => {
   };
 
   const subtotal = cartItems.reduce((sum, item) => {
-    const price = parseFloat(item.price.replace('€', '').replace(',', ''));
+    const price = parseFloat(item.price.replace('₹', '').replace(/,/g, ''));
     return sum + (price * item.quantity);
   }, 0);
 
   const getShippingCost = () => {
     switch (shippingOption) {
       case "express":
-        return 15;
+        return 1500;
       case "overnight":
-        return 35;
+        return 3500;
       default:
         return 0; // Standard shipping is free
     }
@@ -220,7 +222,7 @@ const Checkout = () => {
                 <div className="border-t border-muted-foreground/20 mt-4 pt-6">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span className="text-foreground">€{subtotal.toLocaleString()}</span>
+                    <span className="text-foreground">₹{subtotal.toLocaleString('en-IN')}</span>
                   </div>
                 </div>
               </div>
@@ -310,7 +312,7 @@ const Checkout = () => {
                         />
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-3 gap-4">
                         <div>
                           <Label htmlFor="shippingCity" className="text-sm font-light text-foreground">
                             City *
@@ -325,8 +327,21 @@ const Checkout = () => {
                           />
                         </div>
                         <div>
+                          <Label htmlFor="shippingState" className="text-sm font-light text-foreground">
+                            State *
+                          </Label>
+                          <Input
+                            id="shippingState"
+                            type="text"
+                            value={shippingAddress.state}
+                            onChange={(e) => handleShippingAddressChange("state", e.target.value)}
+                            className="mt-2 rounded-none"
+                            placeholder="State"
+                          />
+                        </div>
+                        <div>
                           <Label htmlFor="shippingPostalCode" className="text-sm font-light text-foreground">
-                            Postal Code *
+                            PIN Code *
                           </Label>
                           <Input
                             id="shippingPostalCode"
@@ -334,7 +349,7 @@ const Checkout = () => {
                             value={shippingAddress.postalCode}
                             onChange={(e) => handleShippingAddressChange("postalCode", e.target.value)}
                             className="mt-2 rounded-none"
-                            placeholder="Postal code"
+                            placeholder="PIN code"
                           />
                         </div>
                       </div>
@@ -448,7 +463,7 @@ const Checkout = () => {
                         />
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-3 gap-4">
                         <div>
                           <Label htmlFor="billingCity" className="text-sm font-light text-foreground">
                             City *
@@ -463,8 +478,21 @@ const Checkout = () => {
                           />
                         </div>
                         <div>
+                          <Label htmlFor="billingState" className="text-sm font-light text-foreground">
+                            State *
+                          </Label>
+                          <Input
+                            id="billingState"
+                            type="text"
+                            value={billingDetails.state}
+                            onChange={(e) => handleBillingDetailsChange("state", e.target.value)}
+                            className="mt-2 rounded-none"
+                            placeholder="State"
+                          />
+                        </div>
+                        <div>
                           <Label htmlFor="billingPostalCode" className="text-sm font-light text-foreground">
-                            Postal Code *
+                            PIN Code *
                           </Label>
                           <Input
                             id="billingPostalCode"
@@ -472,7 +500,7 @@ const Checkout = () => {
                             value={billingDetails.postalCode}
                             onChange={(e) => handleBillingDetailsChange("postalCode", e.target.value)}
                             className="mt-2 rounded-none"
-                            placeholder="Postal code"
+                            placeholder="PIN code"
                           />
                         </div>
                       </div>
@@ -524,7 +552,7 @@ const Checkout = () => {
                     </Label>
                   </div>
                   <div className="text-sm text-muted-foreground">
-                    €15 • 1-2 business days
+                    ₹1,500 • 1-2 business days
                   </div>
                 </div>
 
@@ -536,7 +564,7 @@ const Checkout = () => {
                     </Label>
                   </div>
                   <div className="text-sm text-muted-foreground">
-                    €35 • Next business day
+                    ₹3,500 • Next business day
                   </div>
                 </div>
               </RadioGroup>
@@ -630,17 +658,17 @@ const Checkout = () => {
                   <div className="bg-muted/10 p-6 rounded-none border border-muted-foreground/20 space-y-3">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Subtotal</span>
-                      <span className="text-foreground">€{subtotal.toLocaleString()}</span>
+                      <span className="text-foreground">₹{subtotal.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Shipping</span>
                       <span className="text-foreground">
-                        {shipping === 0 ? "Free" : `€${shipping}`}
+                        {shipping === 0 ? "Free" : `₹${shipping.toLocaleString('en-IN')}`}
                       </span>
                     </div>
                     <div className="flex justify-between text-lg font-medium border-t border-muted-foreground/20 pt-3">
                       <span className="text-foreground">Total</span>
-                      <span className="text-foreground">€{total.toLocaleString()}</span>
+                      <span className="text-foreground">₹{total.toLocaleString('en-IN')}</span>
                     </div>
                   </div>
 
@@ -649,7 +677,7 @@ const Checkout = () => {
                     disabled={isProcessing || !paymentDetails.cardNumber || !paymentDetails.expiryDate || !paymentDetails.cvv || !paymentDetails.cardholderName}
                     className="w-full rounded-none h-12 text-base"
                   >
-                    {isProcessing ? "Processing..." : `Complete Order • €${total.toLocaleString()}`}
+                    {isProcessing ? "Processing..." : `Complete Order • ₹${total.toLocaleString('en-IN')}`}
                   </Button>
                 </div>
               ) : (
