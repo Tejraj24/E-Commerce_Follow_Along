@@ -1,22 +1,12 @@
-import { ArrowRight, X, Minus, Plus, User } from "lucide-react";
+import { ArrowRight, X, User } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ShoppingBag from "./ShoppingBag";
 import { useAuth } from "@/hooks/useAuth";
-import pantheonImage from "@/assets/pantheon.jpg";
-import eclipseImage from "@/assets/eclipse.jpg";
-import haloImage from "@/assets/halo.jpg";
+import { useCart } from "@/context/CartContext";
 
-interface CartItem {
-  id: number;
-  name: string;
-  price: string;
-  image: string;
-  quantity: number;
-  category: string;
-}
+
 
 const Navigation = () => {
   const { user } = useAuth();
@@ -27,47 +17,8 @@ const Navigation = () => {
   const [isShoppingBagOpen, setIsShoppingBagOpen] = useState(false);
   
   
-  // Shopping bag state with 3 mock items
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      name: "Pantheon",
-      price: "₹2,85,000",
-      image: pantheonImage,
-      quantity: 1,
-      category: "Earrings"
-    },
-    {
-      id: 2,
-      name: "Eclipse",
-      price: "₹3,20,000", 
-      image: eclipseImage,
-      quantity: 1,
-      category: "Bracelets"
-    },
-    {
-      id: 3,
-      name: "Halo",
-      price: "₹1,95,000",
-      image: haloImage, 
-      quantity: 1,
-      category: "Earrings"
-    }
-  ]);
-
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const { cartItems, totalItems, updateQuantity } = useCart();
   
-  const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      setCartItems(items => items.filter(item => item.id !== id));
-    } else {
-      setCartItems(items => 
-        items.map(item => 
-          item.id === id ? { ...item, quantity: newQuantity } : item
-        )
-      );
-    }
-  };
   
   // Preload dropdown images for faster display
   useEffect(() => {
