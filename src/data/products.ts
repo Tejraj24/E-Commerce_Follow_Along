@@ -11,27 +11,7 @@ import circularCollectionImage from "@/assets/circular-collection.png";
 import earringsCollectionImage from "@/assets/earrings-collection.png";
 import ringsCollectionImage from "@/assets/rings-collection.png";
 
-export interface Product {
-  id: string;
-  slug: string;
-  sku: string;
-  name: string;
-  category: string;
-  collection: string;
-  price: string;
-  image: string;
-  isNew?: boolean;
-  isFeatured?: boolean;
-  isBestseller?: boolean;
-  description: string[];
-  material: string;
-  finish: string;
-  dimensions: string;
-  weight: string;
-  stock: number;
-  editorNotes: string;
-  images: string[];
-}
+import { Product } from "@/types/product";
 
 export const products: Product[] = [
   // ─── ORGANIC FORMS — Earrings ───────────────────────────────────────────────

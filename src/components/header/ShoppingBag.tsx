@@ -1,15 +1,7 @@
 import { X, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: string;
-  image: string;
-  quantity: number;
-  category: string;
-}
+import type { CartItem } from "@/context/CartContext";
 
 interface ShoppingBagProps {
   isOpen: boolean;

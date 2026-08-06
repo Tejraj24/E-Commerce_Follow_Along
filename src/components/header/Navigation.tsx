@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import ShoppingBag from "./ShoppingBag";
 import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/context/CartContext";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useSearchProducts } from "@/hooks/useProducts";
 
 
 
@@ -15,6 +17,10 @@ const Navigation = () => {
   const [offCanvasType, setOffCanvasType] = useState<'favorites' | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isShoppingBagOpen, setIsShoppingBagOpen] = useState(false);
+  
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  const { data: searchResults = [], isLoading: isSearchLoading } = useSearchProducts(debouncedSearchQuery);
   
   
   const { cartItems, totalItems, updateQuantity } = useCart();
@@ -274,23 +280,62 @@ const Navigation = () => {
                     placeholder="Search for jewelry..."
                     className="flex-1 bg-transparent text-nav-foreground placeholder:text-nav-foreground/60 outline-none text-lg"
                     autoFocus
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
               </div>
 
-              {/* Popular searches */}
+              {/* Popular searches or Results */}
               <div>
-                <h3 className="text-nav-foreground text-sm font-light mb-4">Popular Searches</h3>
-                <div className="flex flex-wrap gap-3">
-                  {popularSearches.map((search, index) => (
-                    <button
-                      key={index}
-                      className="text-nav-foreground hover:text-nav-hover text-sm font-light py-2 px-4 border border-border rounded-full transition-colors duration-200 hover:border-nav-hover"
-                    >
-                      {search}
-                    </button>
-                  ))}
-                </div>
+                {!searchQuery.trim() ? (
+                  <>
+                    <h3 className="text-nav-foreground text-sm font-light mb-4">Popular Searches</h3>
+                    <div className="flex flex-wrap gap-3">
+                      {popularSearches.map((search, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setSearchQuery(search)}
+                          className="text-nav-foreground hover:text-nav-hover text-sm font-light py-2 px-4 border border-border rounded-full transition-colors duration-200 hover:border-nav-hover"
+                        >
+                          {search}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-nav-foreground text-sm font-light mb-4">
+                      {isSearchLoading ? "Searching..." : `Results for "${debouncedSearchQuery}"`}
+                    </h3>
+                    {isSearchLoading ? (
+                      <div className="text-sm font-light text-muted-foreground">Loading results...</div>
+                    ) : searchResults.length > 0 ? (
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {searchResults.slice(0, 4).map((product) => (
+                          <Link
+                            key={product.id}
+                            to={`/product/${product.slug}`}
+                            onClick={() => setIsSearchOpen(false)}
+                            className="group block"
+                          >
+                            <div className="aspect-square bg-secondary/30 mb-2 overflow-hidden">
+                              <img 
+                                src={product.image} 
+                                alt={product.name}
+                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                              />
+                            </div>
+                            <h4 className="text-sm font-light truncate">{product.name}</h4>
+                            <p className="text-xs text-muted-foreground">{product.price}</p>
+                          </Link>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-sm font-light text-muted-foreground">No products found matching your search.</div>
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>

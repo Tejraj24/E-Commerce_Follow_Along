@@ -10,7 +10,8 @@ import linkBracelet from "@/assets/link-bracelet.png";
 import circularCollection from "@/assets/circular-collection.png";
 import ringsCollection from "@/assets/rings-collection.png";
 import shadowlineHover from "@/assets/shadowline-1.jpg";
-import { products, getRelatedProducts, Product } from "@/data/products";
+import { products, getRelatedProducts } from "@/data/products";
+import type { Product } from "@/types/product";
 
 interface ProductCarouselProps {
   relatedTo?: Product;

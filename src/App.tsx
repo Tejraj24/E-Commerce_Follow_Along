@@ -5,6 +5,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/context/CartContext";
+import { WishlistProvider } from "@/context/WishlistContext";
+import { CompareProvider } from "@/context/CompareContext";
+import { RecentlyViewedProvider } from "@/context/RecentlyViewedContext";
+import CompareBar from "@/components/product/CompareBar";
 import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
 import Category from "./pages/Category";
@@ -20,6 +24,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import Auth from "./pages/Auth";
 import Account from "./pages/Account";
+import Wishlist from "./pages/Wishlist";
+import Compare from "./pages/Compare";
 
 const queryClient = new QueryClient();
 
@@ -29,28 +35,38 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <CartProvider>
-          <AuthProvider>
-            <ScrollToTop />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/category/:category" element={<Category />} />
-              <Route path="/product/:productId" element={<ProductDetail />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/about/our-story" element={<OurStory />} />
-              <Route path="/about/sustainability" element={<Sustainability />} />
-              <Route path="/about/size-guide" element={<SizeGuide />} />
-              <Route path="/about/customer-care" element={<CustomerCare />} />
-              <Route path="/about/store-locator" element={<StoreLocator />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-of-service" element={<TermsOfService />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/account" element={<Account />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </AuthProvider>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <WishlistProvider>
+              <CompareProvider>
+                <RecentlyViewedProvider>
+                  <ScrollToTop />
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/category/:category" element={<Category />} />
+                    <Route path="/product/:productId" element={<ProductDetail />} />
+                    <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/wishlist" element={<Wishlist />} />
+                    <Route path="/compare" element={<Compare />} />
+                    <Route path="/about/our-story" element={<OurStory />} />
+                    <Route path="/about/sustainability" element={<Sustainability />} />
+                    <Route path="/about/size-guide" element={<SizeGuide />} />
+                    <Route path="/about/customer-care" element={<CustomerCare />} />
+                    <Route path="/about/store-locator" element={<StoreLocator />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="/terms-of-service" element={<TermsOfService />} />
+                    <Route path="/auth" element={<Auth />} />
+                    <Route path="/account" element={<Account />} />
+                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                  {/* Global floating compare bar — visible on all pages */}
+                  <CompareBar />
+                </RecentlyViewedProvider>
+              </CompareProvider>
+            </WishlistProvider>
+          </CartProvider>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
